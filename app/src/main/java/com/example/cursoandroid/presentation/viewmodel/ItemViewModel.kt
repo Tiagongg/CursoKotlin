@@ -25,6 +25,9 @@ class ItemViewModel(application: Application) : AndroidViewModel(application) {
     private val _selectedCategory = MutableStateFlow<String?>(null)
     val selectedCategory: StateFlow<String?> = _selectedCategory.asStateFlow()
 
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
@@ -32,11 +35,12 @@ class ItemViewModel(application: Application) : AndroidViewModel(application) {
     val error: StateFlow<String?> = _error.asStateFlow()
 
     // Lista reactiva de items filtrados por categoría
-    val filteredItems: StateFlow<List<Item>> = combine(_items, _selectedCategory) { items, category ->
-        if (category != null && category != "Todos") {
-            items.filter { it.category == category }
-        } else {
-            items
+    val filteredItems: StateFlow<List<Item>> = combine(_items, _selectedCategory, _searchQuery) { items, category, query ->
+        items.filter { item ->
+            val matchesCategory = category == null || category == "Todos" || item.category == category
+            val matchesSearch = query.isEmpty() || item.title.contains(query, ignoreCase = true) || 
+                               item.description.contains(query, ignoreCase = true)
+            matchesCategory && matchesSearch
         }
     }.stateIn(
         viewModelScope,
@@ -113,6 +117,14 @@ class ItemViewModel(application: Application) : AndroidViewModel(application) {
     // Cambia la categoría seleccionada para el filtro
     fun filterByCategory(category: String?) {
         _selectedCategory.value = category
+    }
+
+    fun searchItems(query: String) {
+        _searchQuery.value = query
+    }
+
+    fun clearSearch() {
+        _searchQuery.value = ""
     }
 
     // Limpia el estado de error

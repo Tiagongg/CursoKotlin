@@ -42,6 +42,14 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
+            text = "Bienvenidos al Marketplace",
+            style = MaterialTheme.typography.headlineLarge,
+            color = MaterialTheme.colorScheme.primary
+        )
+        
+        Spacer(modifier = Modifier.height(32.dp))
+        
+        Text(
             text = "Iniciar Sesión",
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.primary

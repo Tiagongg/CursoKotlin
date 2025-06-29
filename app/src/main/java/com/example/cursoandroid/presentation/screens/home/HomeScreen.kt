@@ -28,6 +28,7 @@ fun HomeScreen(
     // Observa los estados de los ViewModels
     val items by itemViewModel.items.collectAsState()
     val selectedCategory by itemViewModel.selectedCategory.collectAsState()
+    val searchQuery by itemViewModel.searchQuery.collectAsState()
     val isLoading by itemViewModel.isLoading.collectAsState()
     val error by itemViewModel.error.collectAsState()
     
@@ -37,12 +38,8 @@ fun HomeScreen(
         topBar = {
             // Barra superior con título y acciones
             TopAppBar(
-                title = { Text("Mi App") },
+                title = { Text("Marketplace") },
                 actions = {
-                    // Botón para ir al mapa
-                    IconButton(onClick = { navController.navigate(Screen.Map.route) }) {
-                        Icon(Icons.Default.LocationOn, contentDescription = "Mapa")
-                    }
                     // Botón para cerrar sesión
                     IconButton(onClick = { authViewModel.logout() }) {
                         Icon(Icons.Default.ExitToApp, contentDescription = "Cerrar Sesión")
@@ -64,6 +61,25 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
+            // Campo de búsqueda
+            OutlinedTextField(
+                value = searchQuery,
+                onValueChange = { itemViewModel.searchItems(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                placeholder = { Text("Buscar items...") },
+                leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Buscar") },
+                trailingIcon = {
+                    if (searchQuery.isNotEmpty()) {
+                        IconButton(onClick = { itemViewModel.clearSearch() }) {
+                            Icon(Icons.Default.Clear, contentDescription = "Limpiar búsqueda")
+                        }
+                    }
+                },
+                singleLine = true
+            )
+            
             // Filtro de categorías
             CategoryFilter(
                 selectedCategory = selectedCategory,
@@ -107,7 +123,9 @@ fun HomeScreen(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("No hay items disponibles")
+                    Text(
+                        text = if (searchQuery.isNotEmpty()) "No se encontraron items" else "No hay items disponibles"
+                    )
                 }
             // Muestra la lista de items filtrados
             } else {
