@@ -79,7 +79,5 @@
 - `ACCESS_FINE_LOCATION`: Para seleccionar y mostrar ubicaciones en el mapa
 - `INTERNET`: Para Google Maps
 
-## 👨‍💻 Autor
-
 Desarrollado como parte de un curso de Android, cumpliendo consignas de arquitectura, persistencia, navegación y uso de dispositivos.
 
