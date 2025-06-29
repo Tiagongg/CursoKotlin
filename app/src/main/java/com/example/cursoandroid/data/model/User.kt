@@ -3,12 +3,13 @@ package com.example.cursoandroid.data.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+// Entidad de usuario para la base de datos Room
 @Entity(tableName = "users")
 data class User(
     @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
-    val email: String,
-    val password: String,
-    val name: String,
-    val createdAt: Long = System.currentTimeMillis()
+    val id: Long = 0, // Identificador único del usuario
+    val email: String, // Correo electrónico del usuario
+    val password: String, // Contraseña (en un caso real debería estar hasheada)
+    val name: String, // Nombre del usuario
+    val createdAt: Long = System.currentTimeMillis() // Fecha de creación
 ) 

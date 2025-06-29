@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
+// ViewModel encargado de la lógica de autenticación y registro de usuarios
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: UserRepository
@@ -25,6 +26,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         repository = UserRepository(db.userDao())
     }
 
+    // Inicia sesión con email y contraseña. Actualiza el estado según el resultado.
     fun login(email: String, password: String) {
         viewModelScope.launch {
             _authState.value = AuthState.Loading
@@ -51,6 +53,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    // Registra un nuevo usuario. Actualiza el estado según el resultado.
     fun register(email: String, password: String, name: String) {
         viewModelScope.launch {
             _authState.value = AuthState.Loading
@@ -85,11 +88,13 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    // Cierra la sesión del usuario actual
     fun logout() {
         _currentUser.value = null
         _authState.value = AuthState.Initial
     }
 
+    // Limpia el estado de error si existe
     fun clearError() {
         if (_authState.value is AuthState.Error) {
             _authState.value = AuthState.Initial
@@ -97,9 +102,10 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     }
 }
 
+// Estados posibles de la autenticación
 sealed class AuthState {
-    object Initial : AuthState()
-    object Loading : AuthState()
-    data class Success(val user: User) : AuthState()
-    data class Error(val message: String) : AuthState()
+    object Initial : AuthState() // Estado inicial
+    object Loading : AuthState() // Estado de carga
+    data class Success(val user: User) : AuthState() // Autenticación exitosa
+    data class Error(val message: String) : AuthState() // Error en autenticación o registro
 } 

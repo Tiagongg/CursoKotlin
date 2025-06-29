@@ -18,12 +18,14 @@ import com.example.cursoandroid.presentation.viewmodel.AuthViewModel
 import com.example.cursoandroid.presentation.viewmodel.ItemViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
+// Pantalla principal (Home) que muestra la lista de items y permite filtrar, agregar y navegar.
 @Composable
 fun HomeScreen(
     navController: NavController,
     itemViewModel: ItemViewModel,
     authViewModel: AuthViewModel
 ) {
+    // Observa los estados de los ViewModels
     val items by itemViewModel.items.collectAsState()
     val selectedCategory by itemViewModel.selectedCategory.collectAsState()
     val isLoading by itemViewModel.isLoading.collectAsState()
@@ -33,12 +35,15 @@ fun HomeScreen(
     
     Scaffold(
         topBar = {
+            // Barra superior con título y acciones
             TopAppBar(
                 title = { Text("Mi App") },
                 actions = {
+                    // Botón para ir al mapa
                     IconButton(onClick = { navController.navigate(Screen.Map.route) }) {
                         Icon(Icons.Default.LocationOn, contentDescription = "Mapa")
                     }
+                    // Botón para cerrar sesión
                     IconButton(onClick = { authViewModel.logout() }) {
                         Icon(Icons.Default.ExitToApp, contentDescription = "Cerrar Sesión")
                     }
@@ -46,6 +51,7 @@ fun HomeScreen(
             )
         },
         floatingActionButton = {
+            // Botón flotante para agregar un nuevo item
             FloatingActionButton(
                 onClick = { navController.navigate(Screen.AddItem.route) }
             ) {
@@ -62,6 +68,7 @@ fun HomeScreen(
             CategoryFilter(
                 selectedCategory = selectedCategory,
                 onCategorySelected = { category ->
+                    // Cambia la categoría seleccionada en el ViewModel
                     itemViewModel.filterByCategory(category)
                 },
                 categories = listOf("Electrónicos", "Deportes", "Libros", "Otros")
@@ -69,7 +76,7 @@ fun HomeScreen(
             
             Spacer(modifier = Modifier.height(16.dp))
             
-            // Lista de items
+            // Muestra un indicador de carga si está cargando
             if (isLoading) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -77,6 +84,7 @@ fun HomeScreen(
                 ) {
                     CircularProgressIndicator()
                 }
+            // Muestra un mensaje de error si hay error
             } else if (error != null) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -93,6 +101,7 @@ fun HomeScreen(
                         }
                     }
                 }
+            // Muestra un mensaje si no hay items
             } else if (filteredItems.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -100,6 +109,7 @@ fun HomeScreen(
                 ) {
                     Text("No hay items disponibles")
                 }
+            // Muestra la lista de items filtrados
             } else {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
@@ -107,9 +117,11 @@ fun HomeScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(filteredItems) { item ->
+                        // Componente reutilizable para mostrar cada item
                         ItemCard(
                             item = item,
                             onClick = {
+                                // Navega al detalle del item seleccionado
                                 navController.navigate(Screen.ItemDetail.route.replace("{itemId}", item.id.toString()))
                             }
                         )

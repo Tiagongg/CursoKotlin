@@ -1,19 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- 
-    INSTRUCCIONES PARA CONFIGURAR GOOGLE MAPS:
-    
-    1. Ve a https://console.cloud.google.com/
-    2. Crea un proyecto o selecciona uno existente
-    3. Habilita "Maps SDK for Android"
-    4. Crea una API key en Credenciales
-    5. Restringe la API key a tu aplicación:
-       - Package name: com.example.cursoandroid
-       - SHA-1: C5:39:7E:15:9E:A2:E7:05:DD:0E:D8:F9:35:52:03:42:97:3C:5E:D2
-    6. Reemplaza "TU_API_KEY_AQUI" abajo con tu API key real
-    
-    IMPORTANTE: Para producción, considera usar BuildConfig o un archivo de propiedades
-    para no exponer la API key en el código fuente.
-    -->
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCpMBWzzD2iPli5X5-B-itIfFU-7usNROg</string>
+  
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">${GOOGLE_MAPS_API_KEY}</string>
 </resources> 

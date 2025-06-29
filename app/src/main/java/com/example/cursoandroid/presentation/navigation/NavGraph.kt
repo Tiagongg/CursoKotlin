@@ -14,6 +14,7 @@ import com.example.cursoandroid.presentation.screens.map.SelectLocationMapScreen
 import com.example.cursoandroid.presentation.viewmodel.AuthViewModel
 import com.example.cursoandroid.presentation.viewmodel.ItemViewModel
 
+// Define el grafo de navegación de la app, es decir, las rutas y qué pantalla mostrar en cada una.
 @Composable
 fun NavGraph(
     navController: NavHostController,
@@ -25,7 +26,7 @@ fun NavGraph(
         navController = navController,
         startDestination = startDestination
     ) {
-        // Rutas públicas (sin autenticación)
+        // Ruta de login (pública)
         composable(Screen.Login.route) {
             LoginScreen(
                 navController = navController,
@@ -33,6 +34,7 @@ fun NavGraph(
             )
         }
         
+        // Ruta de registro (pública)
         composable(Screen.Register.route) {
             RegisterScreen(
                 navController = navController,
@@ -40,7 +42,7 @@ fun NavGraph(
             )
         }
         
-        // Rutas privadas (requieren autenticación)
+        // Ruta principal (privada, requiere autenticación)
         composable(Screen.Home.route) {
             HomeScreen(
                 navController = navController,
@@ -49,6 +51,7 @@ fun NavGraph(
             )
         }
         
+        // Ruta para agregar un nuevo item (privada)
         composable(Screen.AddItem.route) {
             AddItemScreen(
                 navController = navController,
@@ -56,10 +59,12 @@ fun NavGraph(
             )
         }
         
+        // Ruta para ver el detalle de un item (privada)
         composable(
             route = Screen.ItemDetail.route,
             arguments = Screen.ItemDetail.arguments
         ) { backStackEntry ->
+            // Obtiene el ID del item desde los argumentos de la ruta
             val itemId = backStackEntry.arguments?.getLong("itemId") ?: 0L
             ItemDetailScreen(
                 navController = navController,
@@ -68,6 +73,7 @@ fun NavGraph(
             )
         }
         
+        // Ruta para ver el mapa (privada)
         composable(
             route = Screen.Map.route,
             arguments = Screen.Map.arguments
@@ -80,6 +86,7 @@ fun NavGraph(
             )
         }
         
+        // Ruta para seleccionar una ubicación en el mapa (privada)
         composable(
             route = Screen.SelectLocation.route,
             arguments = Screen.SelectLocation.arguments

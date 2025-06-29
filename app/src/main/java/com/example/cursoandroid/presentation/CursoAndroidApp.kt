@@ -17,6 +17,7 @@ import com.example.cursoandroid.presentation.viewmodel.AuthViewModel
 import com.example.cursoandroid.presentation.viewmodel.ItemViewModel
 import com.example.cursoandroid.ui.theme.CursoAndroidTheme
 
+// Composable principal de la app. Configura el tema, los ViewModels y la navegación.
 @Composable
 fun CursoAndroidApp() {
     CursoAndroidTheme {
@@ -24,19 +25,24 @@ fun CursoAndroidApp() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
+            // Obtiene el contexto de la aplicación
             val context = LocalContext.current.applicationContext as Application
+            // Inicializa los ViewModels de autenticación y de items
             val authViewModel = remember { AuthViewModel(context) }
             val itemViewModel = remember { ItemViewModel(context) }
+            // Observa el usuario actual para saber si está autenticado
             val currentUser by authViewModel.currentUser.collectAsState()
+            // Controlador de navegación
             val navController = rememberNavController()
             
-            // Determinar la pantalla inicial basada en el estado de autenticación
+            // Determina la pantalla inicial según si hay usuario autenticado
             val startDestination = if (currentUser != null) {
                 Screen.Home.route
             } else {
                 Screen.Login.route
             }
             
+            // Configura el grafo de navegación de la app
             NavGraph(
                 authViewModel = authViewModel,
                 itemViewModel = itemViewModel,

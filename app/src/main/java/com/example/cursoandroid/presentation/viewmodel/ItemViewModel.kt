@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.SharingStarted
 
+// ViewModel encargado de la lógica de gestión de items/productos
 class ItemViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: ItemRepository
@@ -30,6 +31,7 @@ class ItemViewModel(application: Application) : AndroidViewModel(application) {
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
 
+    // Lista reactiva de items filtrados por categoría
     val filteredItems: StateFlow<List<Item>> = combine(_items, _selectedCategory) { items, category ->
         if (category != null && category != "Todos") {
             items.filter { it.category == category }
@@ -45,6 +47,7 @@ class ItemViewModel(application: Application) : AndroidViewModel(application) {
     init {
         val db = AppDatabase.getDatabase(application)
         repository = ItemRepository(db.itemDao())
+        // Al inicializar, carga los items del usuario 1 (puedes adaptar esto para multiusuario)
         viewModelScope.launch {
             _isLoading.value = true
             try {
@@ -59,6 +62,7 @@ class ItemViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    // Agrega un nuevo item a la base de datos
     fun addItem(item: Item) {
         viewModelScope.launch {
             try {
@@ -73,6 +77,7 @@ class ItemViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    // Actualiza un item existente
     fun updateItem(item: Item) {
         viewModelScope.launch {
             try {
@@ -87,6 +92,7 @@ class ItemViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    // Elimina un item por su ID
     fun deleteItem(itemId: Long) {
         viewModelScope.launch {
             try {
@@ -104,10 +110,12 @@ class ItemViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    // Cambia la categoría seleccionada para el filtro
     fun filterByCategory(category: String?) {
         _selectedCategory.value = category
     }
 
+    // Limpia el estado de error
     fun clearError() {
         _error.value = null
     }
