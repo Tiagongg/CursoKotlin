@@ -1,16 +1,3 @@
-# Marketplace de Items con Geolocalización
-
-## 📖 Introducción
-
-Esta aplicación Android es un **marketplace local** que permite a los usuarios comprar, vender e intercambiar productos con geolocalización. Los usuarios pueden registrarse, iniciar sesión, agregar productos con fotos y ubicación específica, y navegar por un catálogo filtrable por categorías.
-
-La aplicación está diseñada como una solución completa de marketplace que combina funcionalidades de comercio electrónico con mapas interactivos, permitiendo a los usuarios visualizar la ubicación de los productos y seleccionar ubicaciones precisas al publicar sus propios items.
-
-### 🎯 Objetivos principales
-- Facilitar el comercio local entre usuarios
-- Proporcionar una experiencia de usuario intuitiva y moderna
-- Integrar funcionalidades de mapa para mejorar la experiencia de compra
-- Mantener persistencia local de datos para uso offline
 
 ## 🚀 Instructivo paso a paso para levantar la aplicación
 
