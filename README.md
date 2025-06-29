@@ -7,45 +7,6 @@
 - Dispositivo Android o emulador con API level 24 o superior
 - Conexión a internet para descargar dependencias
 
-### Paso 1: Clonar el repositorio
-```bash
-git clone https://github.com/tuusuario/tu-repo.git
-cd Adnroid
-```
-
-### Paso 2: Configurar Google Maps API Key
-1. Ve a [Google Cloud Console](https://console.cloud.google.com/)
-2. Crea un nuevo proyecto o selecciona uno existente
-3. Habilita la API de Google Maps para Android
-4. Crea credenciales (API Key)
-5. Agrega la API Key en `app/src/main/res/values/google_maps_api.xml`:
-   ```xml
-   <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">TU_API_KEY_AQUI</string>
-   ```
-
-### Paso 3: Sincronizar dependencias
-1. Abre el proyecto en Android Studio
-2. Espera a que se sincronicen las dependencias de Gradle
-3. Si hay errores, ejecuta `File > Sync Project with Gradle Files`
-
-### Paso 4: Configurar el dispositivo/emulador
-1. Conecta un dispositivo Android o inicia un emulador
-2. Asegúrate de que el dispositivo tenga:
-   - Google Play Services instalado
-   - Permisos de cámara y ubicación habilitados
-   - Conexión a internet
-
-### Paso 5: Ejecutar la aplicación
-1. Selecciona tu dispositivo/emulador en Android Studio
-2. Presiona el botón "Run" (▶️) o usa `Shift + F10`
-3. La aplicación se compilará e instalará automáticamente
-
-### Paso 6: Configurar permisos (primera ejecución)
-Al ejecutar la app por primera vez, concede los siguientes permisos:
-- **Cámara**: Para tomar fotos de productos
-- **Almacenamiento**: Para seleccionar imágenes de la galería
-- **Ubicación**: Para mostrar y seleccionar ubicaciones en el mapa
-
 ## 🛠️ Tecnologías utilizadas
 
 ### Lenguajes y Frameworks
