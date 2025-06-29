@@ -48,68 +48,8 @@
 - **Espresso**: Testing de UI
 - **Mockito**: Mocking para tests
 
-## 🌍 Información relevante para la ejecución en distintos ambientes
-
-### Ambiente de Desarrollo
-- **Sistema Operativo**: Windows 10/11, macOS, Linux
-- **IDE**: Android Studio Hedgehog | 2023.1.1
-- **Gradle**: Versión 8.4
-- **Android Gradle Plugin**: 8.1.4
-- **Compile SDK**: 34
-- **Target SDK**: 34
-- **Minimum SDK**: 24 (Android 7.0)
-
-### Ambiente de Testing
-- **Dispositivos físicos**: Android 7.0 o superior
-- **Emuladores**: API level 24-34
-- **Google Play Services**: Versión 21.0.1 o superior
-- **Memoria RAM**: Mínimo 2GB disponible
-
-### Ambiente de Producción
-- **Dispositivos soportados**: Android 7.0 (API 24) o superior
-- **Orientación**: Portrait y Landscape
-- **Densidades de pantalla**: mdpi, hdpi, xhdpi, xxhdpi, xxxhdpi
-- **Tamaños de pantalla**: Normal, Large, XLarge
-
-### Configuraciones específicas por ambiente
-
-#### Desarrollo Local
-```properties
-# gradle.properties
-org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
-android.useAndroidX=true
-android.enableJetifier=true
-```
-
-#### Testing
-```properties
-# build.gradle.kts
-android {
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-        }
-    }
-}
-```
-
-#### Producción
-```properties
-# build.gradle.kts
-android {
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        }
-    }
-}
-```
-
 ### Variables de entorno y configuración
 - **Google Maps API Key**: Requerida para funcionalidad de mapas
-- **Debug vs Release**: Configuraciones separadas para desarrollo y producción
-- **ProGuard**: Configurado para optimización en release
 
 ### Dependencias externas
 - **Google Play Services**: Requerido para mapas y ubicación
@@ -139,14 +79,7 @@ android {
 - `ACCESS_FINE_LOCATION`: Para seleccionar y mostrar ubicaciones en el mapa
 - `INTERNET`: Para Google Maps
 
-## 📸 Capturas de pantalla
-
-> Agrega aquí tus capturas de pantalla mostrando la app en acción.
-
 ## 👨‍💻 Autor
 
 Desarrollado como parte de un curso de Android, cumpliendo consignas de arquitectura, persistencia, navegación y uso de dispositivos.
 
----
-
-¡Listo para usar y mejorar! Siéntete libre de hacer forks, pull requests o sugerencias. 
