@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import com.example.cursoandroid.presentation.navigation.Screen
 import com.example.cursoandroid.presentation.viewmodel.AuthState
 import com.example.cursoandroid.presentation.viewmodel.AuthViewModel
+import androidx.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,6 +35,75 @@ fun LoginScreen(
         }
     }
     
+    LoginScreenContent(
+        email = email,
+        password = password,
+        onEmailChange = { email = it },
+        onPasswordChange = { password = it },
+        onLoginClick = { authViewModel.login(email, password) },
+        onRegisterClick = { navController.navigate(Screen.Register.route) },
+        authState = authState
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LoginScreenPreview() {
+    MaterialTheme {
+        LoginScreenContent(
+            email = "usuario@ejemplo.com",
+            password = "123456",
+            onEmailChange = {},
+            onPasswordChange = {},
+            onLoginClick = {},
+            onRegisterClick = {},
+            authState = AuthState.Initial
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LoginScreenLoadingPreview() {
+    MaterialTheme {
+        LoginScreenContent(
+            email = "usuario@ejemplo.com",
+            password = "123456",
+            onEmailChange = {},
+            onPasswordChange = {},
+            onLoginClick = {},
+            onRegisterClick = {},
+            authState = AuthState.Loading
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LoginScreenErrorPreview() {
+    MaterialTheme {
+        LoginScreenContent(
+            email = "usuario@ejemplo.com",
+            password = "123",
+            onEmailChange = {},
+            onPasswordChange = {},
+            onLoginClick = {},
+            onRegisterClick = {},
+            authState = AuthState.Error("Usuario o contraseña incorrectos")
+        )
+    }
+}
+
+@Composable
+private fun LoginScreenContent(
+    email: String,
+    password: String,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onLoginClick: () -> Unit,
+    onRegisterClick: () -> Unit,
+    authState: AuthState
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -59,7 +129,7 @@ fun LoginScreen(
         
         OutlinedTextField(
             value = email,
-            onValueChange = { email = it },
+            onValueChange = onEmailChange,
             label = { Text("Email") },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(
@@ -73,7 +143,7 @@ fun LoginScreen(
         
         OutlinedTextField(
             value = password,
-            onValueChange = { password = it },
+            onValueChange = onPasswordChange,
             label = { Text("Contraseña") },
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
@@ -88,7 +158,7 @@ fun LoginScreen(
         
         if (authState is AuthState.Error) {
             Text(
-                text = (authState as AuthState.Error).message,
+                text = authState.message,
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodyMedium
             )
@@ -96,7 +166,7 @@ fun LoginScreen(
         }
         
         Button(
-            onClick = { authViewModel.login(email, password) },
+            onClick = onLoginClick,
             modifier = Modifier.fillMaxWidth(),
             enabled = authState !is AuthState.Loading && email.isNotBlank() && password.isNotBlank()
         ) {
@@ -113,7 +183,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(16.dp))
         
         TextButton(
-            onClick = { navController.navigate(Screen.Register.route) }
+            onClick = onRegisterClick
         ) {
             Text("¿No tienes cuenta? Regístrate")
         }

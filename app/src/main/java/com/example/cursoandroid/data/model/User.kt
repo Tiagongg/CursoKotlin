@@ -11,5 +11,8 @@ data class User(
     val email: String, // Correo electrónico del usuario
     val password: String, // Contraseña (en un caso real debería estar hasheada)
     val name: String, // Nombre del usuario
+    val lastName: String = "", // Apellido del usuario
+    val age: Int = 0, // Edad del usuario
+    val profileImageUrl: String? = null, // URL de la imagen de perfil (opcional)
     val createdAt: Long = System.currentTimeMillis() // Fecha de creación
 ) 

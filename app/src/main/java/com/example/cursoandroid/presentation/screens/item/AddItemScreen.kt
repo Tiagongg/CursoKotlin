@@ -25,10 +25,12 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.navigation.NavController
+import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
 import com.example.cursoandroid.data.model.Item
 import com.example.cursoandroid.presentation.navigation.Screen
 import com.example.cursoandroid.presentation.viewmodel.ItemViewModel
+import com.example.cursoandroid.presentation.viewmodel.UserViewModel
 import com.google.android.gms.maps.model.LatLng
 import java.io.File
 import java.text.SimpleDateFormat
@@ -37,6 +39,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.mapSaver
+import com.google.android.gms.location.LocationServices
 
 // Helper para guardar LatLng nullable
 val NullableLatLngSaver = run {
@@ -54,9 +57,11 @@ val NullableLatLngSaver = run {
 @Composable
 fun AddItemScreen(
     navController: NavController,
-    itemViewModel: ItemViewModel
+    itemViewModel: ItemViewModel,
+    userViewModel: UserViewModel
 ) {
     val context = LocalContext.current
+    val currentUser by userViewModel.currentUser.collectAsState()
     var title by rememberSaveable { mutableStateOf("") }
     var description by rememberSaveable { mutableStateOf("") }
     var category by rememberSaveable { mutableStateOf("Electrónicos") }
@@ -116,6 +121,17 @@ fun AddItemScreen(
     var cameraPermissionGranted by remember { mutableStateOf(false) }
     val cameraPermissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         cameraPermissionGranted = granted
+    }
+
+    // Permiso de ubicación
+    val locationPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) {
+            getCurrentLocationForAddItem(context) { currentLocation ->
+                location = currentLocation
+            }
+        }
     }
 
     Scaffold(
@@ -240,16 +256,40 @@ fun AddItemScreen(
                 }
             }
             
-            // Botón para elegir ubicación
-            Button(
-                onClick = {
-                    navController.navigate(Screen.SelectLocation.route)
-                },
-                modifier = Modifier.fillMaxWidth()
+            // Botones de ubicación
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Icon(Icons.Default.LocationOn, contentDescription = null)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(if (location != null) "Cambiar ubicación" else "Elegir ubicación")
+                // Botón para usar ubicación actual
+                OutlinedButton(
+                    onClick = {
+                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                            getCurrentLocationForAddItem(context) { currentLocation ->
+                                location = currentLocation
+                            }
+                        } else {
+                            locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                        }
+                    },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Icon(Icons.Default.LocationOn, contentDescription = null)
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text("Mi ubicación")
+                }
+                
+                // Botón para elegir ubicación manualmente
+                OutlinedButton(
+                    onClick = {
+                        navController.navigate(Screen.SelectLocation.route)
+                    },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Icon(Icons.Default.Place, contentDescription = null)
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text("Elegir en mapa")
+                }
             }
             
             location?.let {
@@ -270,7 +310,7 @@ fun AddItemScreen(
                         imageUrl = imageUri?.toString(),
                         latitude = location?.latitude ?: 0.0,
                         longitude = location?.longitude ?: 0.0,
-                        userId = 1
+                        userId = currentUser?.id ?: 1L
                     )
                     itemViewModel.addItem(newItem)
                     navController.navigate(Screen.Home.route) {
@@ -283,6 +323,20 @@ fun AddItemScreen(
                 Icon(Icons.Default.Check, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text("Guardar")
+            }
+        }
+    }
+}
+
+/**
+ * Función para obtener la ubicación actual del usuario en AddItemScreen
+ */
+private fun getCurrentLocationForAddItem(context: Context, onLocationReceived: (LatLng) -> Unit) {
+    if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+        fusedLocationClient.lastLocation.addOnSuccessListener { currentLocation ->
+            currentLocation?.let {
+                onLocationReceived(LatLng(it.latitude, it.longitude))
             }
         }
     }

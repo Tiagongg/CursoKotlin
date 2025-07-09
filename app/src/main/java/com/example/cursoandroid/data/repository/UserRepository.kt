@@ -10,6 +10,10 @@ class UserRepository(
     fun getUserById(userId: Long): Flow<User?> {
         return userDao.getUserById(userId)
     }
+    
+    suspend fun getUserByIdSync(userId: Long): User? {
+        return userDao.getUserByIdSync(userId)
+    }
 
     suspend fun insertUser(user: User): Long {
         return userDao.insertUser(user)
@@ -37,6 +41,31 @@ class UserRepository(
             )
             val userId = insertUser(user)
             Result.success(userId)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun updateUserProfile(
+        userId: Long, 
+        name: String, 
+        lastName: String, 
+        age: Int, 
+        profileImageUrl: String?
+    ): Result<Unit> {
+        return try {
+            val userDao = userDao
+            val existingUser = userDao.getUserByIdSync(userId)
+            existingUser?.let { user ->
+                val updatedUser = user.copy(
+                    name = name,
+                    lastName = lastName,
+                    age = age,
+                    profileImageUrl = profileImageUrl
+                )
+                updateUser(updatedUser)
+                Result.success(Unit)
+            } ?: Result.failure(Exception("Usuario no encontrado"))
         } catch (e: Exception) {
             Result.failure(e)
         }

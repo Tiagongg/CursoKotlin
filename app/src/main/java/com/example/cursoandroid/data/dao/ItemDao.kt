@@ -29,4 +29,7 @@ interface ItemDao {
 
     @Query("SELECT * FROM items WHERE id = :itemId")
     suspend fun getItemById(itemId: Long): Item?
+    
+    @Query("SELECT * FROM items ORDER BY createdAt DESC")
+    fun getAllItems(): Flow<List<Item>>
 } 

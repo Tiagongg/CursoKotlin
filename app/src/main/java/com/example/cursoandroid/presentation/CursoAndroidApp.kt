@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
@@ -15,6 +16,8 @@ import com.example.cursoandroid.presentation.navigation.NavGraph
 import com.example.cursoandroid.presentation.navigation.Screen
 import com.example.cursoandroid.presentation.viewmodel.AuthViewModel
 import com.example.cursoandroid.presentation.viewmodel.ItemViewModel
+import com.example.cursoandroid.presentation.viewmodel.UserViewModel
+import com.example.cursoandroid.presentation.viewmodel.ProfileViewModel
 import com.example.cursoandroid.ui.theme.CursoAndroidTheme
 
 // Composable principal de la app. Configura el tema, los ViewModels y la navegación.
@@ -27,13 +30,22 @@ fun CursoAndroidApp() {
         ) {
             // Obtiene el contexto de la aplicación
             val context = LocalContext.current.applicationContext as Application
-            // Inicializa los ViewModels de autenticación y de items
+            // Inicializa los ViewModels de autenticación, items y perfil
             val authViewModel = remember { AuthViewModel(context) }
             val itemViewModel = remember { ItemViewModel(context) }
+            val userViewModel = remember { UserViewModel(context) }
+            val profileViewModel = remember { ProfileViewModel(context) }
             // Observa el usuario actual para saber si está autenticado
             val currentUser by authViewModel.currentUser.collectAsState()
             // Controlador de navegación
             val navController = rememberNavController()
+            
+            // Sincronizar usuario entre AuthViewModel y UserViewModel
+            LaunchedEffect(currentUser) {
+                currentUser?.let { user ->
+                    userViewModel.setCurrentUser(user)
+                }
+            }
             
             // Determina la pantalla inicial según si hay usuario autenticado
             val startDestination = if (currentUser != null) {
@@ -46,6 +58,8 @@ fun CursoAndroidApp() {
             NavGraph(
                 authViewModel = authViewModel,
                 itemViewModel = itemViewModel,
+                userViewModel = userViewModel,
+                profileViewModel = profileViewModel,
                 navController = navController,
                 startDestination = startDestination
             )

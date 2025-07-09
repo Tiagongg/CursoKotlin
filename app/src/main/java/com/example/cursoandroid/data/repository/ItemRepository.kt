@@ -38,4 +38,8 @@ class ItemRepository(
     suspend fun getItemById(itemId: Long): Item? {
         return itemDao.getItemById(itemId)
     }
+    
+    fun getAllItems(): Flow<List<Item>> {
+        return itemDao.getAllItems()
+    }
 } 

@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import com.example.cursoandroid.presentation.navigation.Screen
 import com.example.cursoandroid.presentation.viewmodel.AuthState
 import com.example.cursoandroid.presentation.viewmodel.AuthViewModel
+import androidx.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,6 +37,99 @@ fun RegisterScreen(
         }
     }
     
+    RegisterScreenContent(
+        name = name,
+        email = email,
+        password = password,
+        confirmPassword = confirmPassword,
+        onNameChange = { name = it },
+        onEmailChange = { email = it },
+        onPasswordChange = { password = it },
+        onConfirmPasswordChange = { confirmPassword = it },
+        onRegisterClick = { 
+            if (password == confirmPassword) {
+                authViewModel.register(email, password, name)
+            }
+        },
+        onLoginClick = { navController.navigate(Screen.Login.route) },
+        authState = authState
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun RegisterScreenPreview() {
+    MaterialTheme {
+        RegisterScreenContent(
+            name = "Juan Pérez",
+            email = "juan@email.com",
+            password = "123456",
+            confirmPassword = "123456",
+            onNameChange = {},
+            onEmailChange = {},
+            onPasswordChange = {},
+            onConfirmPasswordChange = {},
+            onRegisterClick = {},
+            onLoginClick = {},
+            authState = AuthState.Initial
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun RegisterScreenLoadingPreview() {
+    MaterialTheme {
+        RegisterScreenContent(
+            name = "Juan Pérez",
+            email = "juan@email.com",
+            password = "123456",
+            confirmPassword = "123456",
+            onNameChange = {},
+            onEmailChange = {},
+            onPasswordChange = {},
+            onConfirmPasswordChange = {},
+            onRegisterClick = {},
+            onLoginClick = {},
+            authState = AuthState.Loading
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun RegisterScreenErrorPreview() {
+    MaterialTheme {
+        RegisterScreenContent(
+            name = "Juan Pérez",
+            email = "juan@email.com",
+            password = "123",
+            confirmPassword = "456",
+            onNameChange = {},
+            onEmailChange = {},
+            onPasswordChange = {},
+            onConfirmPasswordChange = {},
+            onRegisterClick = {},
+            onLoginClick = {},
+            authState = AuthState.Error("Las contraseñas no coinciden")
+        )
+    }
+}
+
+@Composable
+private fun RegisterScreenContent(
+    name: String,
+    email: String,
+    password: String,
+    confirmPassword: String,
+    onNameChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onConfirmPasswordChange: (String) -> Unit,
+    onRegisterClick: () -> Unit,
+    onLoginClick: () -> Unit,
+    authState: AuthState
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -53,7 +147,7 @@ fun RegisterScreen(
         
         OutlinedTextField(
             value = name,
-            onValueChange = { name = it },
+            onValueChange = onNameChange,
             label = { Text("Nombre") },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(
@@ -66,7 +160,7 @@ fun RegisterScreen(
         
         OutlinedTextField(
             value = email,
-            onValueChange = { email = it },
+            onValueChange = onEmailChange,
             label = { Text("Email") },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(
@@ -80,7 +174,7 @@ fun RegisterScreen(
         
         OutlinedTextField(
             value = password,
-            onValueChange = { password = it },
+            onValueChange = onPasswordChange,
             label = { Text("Contraseña") },
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
@@ -95,7 +189,7 @@ fun RegisterScreen(
         
         OutlinedTextField(
             value = confirmPassword,
-            onValueChange = { confirmPassword = it },
+            onValueChange = onConfirmPasswordChange,
             label = { Text("Confirmar Contraseña") },
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
@@ -110,7 +204,7 @@ fun RegisterScreen(
         
         if (authState is AuthState.Error) {
             Text(
-                text = (authState as AuthState.Error).message,
+                text = authState.message,
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodyMedium
             )
@@ -118,11 +212,7 @@ fun RegisterScreen(
         }
         
         Button(
-            onClick = { 
-                if (password == confirmPassword) {
-                    authViewModel.register(email, password, name)
-                }
-            },
+            onClick = onRegisterClick,
             modifier = Modifier.fillMaxWidth(),
             enabled = authState !is AuthState.Loading && 
                      name.isNotBlank() && 
@@ -143,7 +233,7 @@ fun RegisterScreen(
         Spacer(modifier = Modifier.height(16.dp))
         
         TextButton(
-            onClick = { navController.navigate(Screen.Login.route) }
+            onClick = onLoginClick
         ) {
             Text("¿Ya tienes cuenta? Inicia sesión")
         }

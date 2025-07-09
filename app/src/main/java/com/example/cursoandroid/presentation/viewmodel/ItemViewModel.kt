@@ -51,11 +51,11 @@ class ItemViewModel(application: Application) : AndroidViewModel(application) {
     init {
         val db = AppDatabase.getDatabase(application)
         repository = ItemRepository(db.itemDao())
-        // Al inicializar, carga los items del usuario 1 (puedes adaptar esto para multiusuario)
+        // Al inicializar, carga todos los items (para la vista general)
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.getItemsByUser(1L).collectLatest { itemsList ->
+                repository.getAllItems().collectLatest { itemsList ->
                     _items.value = itemsList
                     _isLoading.value = false
                 }
@@ -64,6 +64,17 @@ class ItemViewModel(application: Application) : AndroidViewModel(application) {
                 _isLoading.value = false
             }
         }
+    }
+    
+    // Obtiene items del usuario específico
+    fun getItemsByUser(userId: Long): StateFlow<List<Item>> {
+        val userItems = MutableStateFlow<List<Item>>(emptyList())
+        viewModelScope.launch {
+            repository.getItemsByUser(userId).collectLatest { itemsList ->
+                userItems.value = itemsList
+            }
+        }
+        return userItems.asStateFlow()
     }
 
     // Agrega un nuevo item a la base de datos
@@ -130,5 +141,10 @@ class ItemViewModel(application: Application) : AndroidViewModel(application) {
     // Limpia el estado de error
     fun clearError() {
         _error.value = null
+    }
+    
+    // Obtiene un item por ID
+    suspend fun getItemById(itemId: Long): Item? {
+        return repository.getItemById(itemId)
     }
 } 

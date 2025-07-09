@@ -9,6 +9,9 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE id = :userId")
     fun getUserById(userId: Long): Flow<User?>
 
+    @Query("SELECT * FROM users WHERE id = :userId")
+    suspend fun getUserByIdSync(userId: Long): User?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUser(user: User): Long
 
