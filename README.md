@@ -57,20 +57,7 @@ Una aplicación completa de marketplace desarrollada en **Kotlin** con **Jetpack
 - **Dependency Injection** - Gestión de dependencias
 - **StateFlow & Flow** - Manejo reactivo de estados
 
-### **Componentes Clave**
-```
-📁 app/
-├── 📁 data/
-│   ├── 📁 database/     # Room DB, DAOs, Entities
-│   ├── 📁 model/        # Modelos de datos
-│   └── 📁 repository/   # Repositorios
-├── 📁 presentation/
-│   ├── 📁 components/   # Componentes reutilizables
-│   ├── 📁 screens/      # Pantallas principales
-│   ├── 📁 viewmodel/    # ViewModels
-│   └── 📁 navigation/   # Navegación
-└── 📁 ui/theme/         # Temas y estilos
-```
+
 
 ## 🚀 Instalación y Configuración
 
@@ -80,34 +67,12 @@ Una aplicación completa de marketplace desarrollada en **Kotlin** con **Jetpack
 - Google Maps API Key
 - Dispositivo/Emulador Android API 24+
 
-### **Pasos de Instalación**
-
-1. **Clonar el repositorio**
-   ```bash
-   git clone [URL_DEL_REPOSITORIO]
-   cd Adnroid
-   ```
-
-2. **Configurar Google Maps API Key**
-   - Crear archivo `local.properties` en la raíz del proyecto
-   - Agregar: `MAPS_API_KEY=tu_api_key_aqui`
-   - Obtener API Key en [Google Cloud Console](https://console.cloud.google.com)
-
-3. **Compilar y ejecutar**
-   ```bash
-   ./gradlew assembleDebug
-   ```
-
-4. **Instalar en dispositivo**
-   - Conectar dispositivo Android o iniciar emulador
-   - Run → Run 'app' en Android Studio
-
 ## 📱 Funcionalidades Detalladas
 
 ### **🏠 Pantalla Principal (Home)**
 - Lista scrolleable de todos los items disponibles
 - Barra de búsqueda con filtrado en tiempo real
-- Filtros por categoría con badges visuales
+- Filtros por categoría con chips visuales
 - Botón de agregar item en la barra superior
 - Navegación directa a detalles de item
 
@@ -141,61 +106,6 @@ Una aplicación completa de marketplace desarrollada en **Kotlin** con **Jetpack
 - Permisos de eliminación
 - Estado vacío con mensaje informativo
 
-## 🔒 Permisos Requeridos
-
-| Permiso | Uso | Obligatorio |
-|---------|-----|-------------|
-| `CAMERA` | Tomar fotos para items | ❌ |
-| `ACCESS_FINE_LOCATION` | Ubicación y mapas | ✅ |
-| `READ_MEDIA_IMAGES` | Seleccionar imágenes | ❌ |
-| `INTERNET` | Google Maps y servicios | ✅ |
-
-## 🧪 Testing y Desarrollo
-
-### **Previews de Compose**
-- 25+ previews implementados
-- Estados múltiples (normal, loading, error, empty)
-- Desarrollo sin compilación
-- Feedback visual instantáneo
-
-### **Arquitectura Testeable**
-- ViewModels desacoplados
-- Repositorios mockeable
-- Componentes unitarios
-- Estados predecibles
-
-## 🐛 Troubleshooting
-
-### **Problemas Comunes**
-
-| Problema | Solución |
-|----------|----------|
-| 🗺️ Mapa no carga | Verificar API Key y conexión a internet |
-| 📍 Ubicación no funciona | Conceder permisos de ubicación |
-| 📷 Cámara no abre | Verificar permisos de cámara |
-| 🏗️ Error de compilación | Limpiar proyecto: `./gradlew clean` |
-| 💾 Datos no persisten | Verificar configuración de Room |
-
-### **Logs Útiles**
-```bash
-# Ver logs de la app
-adb logcat | grep "MarketplaceApp"
-
-# Limpiar datos de la app
-adb shell pm clear com.example.cursoandroid
-```
-
-## 🎯 Roadmap Futuro
-
-- [ ] 💬 Sistema de mensajería entre usuarios
-- [ ] ⭐ Sistema de calificaciones y reviews
-- [ ] 💳 Integración de pagos
-- [ ] 🔔 Notificaciones push
-- [ ] 🌙 Modo oscuro
-- [ ] 🌐 Sincronización con servidor
-- [ ] 📊 Analytics de uso
-
-## 👨‍💻 Desarrollo
 
 **Desarrollado como proyecto educativo** cumpliendo consignas de:
 - ✅ Arquitectura MVVM
@@ -205,11 +115,6 @@ adb shell pm clear com.example.cursoandroid
 - ✅ Material Design
 - ✅ Jetpack Compose
 
----
-
-### 📞 Soporte
-
-Para problemas o consultas sobre la implementación, revisar la documentación de Android o consultar los logs de la aplicación.
 
 **¡Gracias por usar Android Marketplace App!** 🚀
 
