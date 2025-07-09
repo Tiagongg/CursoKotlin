@@ -210,15 +210,10 @@ fun MapScreen(
                     }
                 }
             }
-            
-            // Removido: Loading overlay ya no es necesario
         }
     }
 }
 
-/**
- * Función simple para centrar el mapa en la ubicación actual del usuario
- */
 private fun centerMapOnUserLocation(
     context: android.content.Context,
     cameraPositionState: CameraPositionState
@@ -250,10 +245,6 @@ private fun centerMapOnUserLocation(
     }
 }
 
-/**
- * Calcula la distancia entre dos puntos usando la fórmula de Haversine
- * @return distancia en kilómetros
- */
 private fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
     val earthRadius = 6371.0 // Radio de la Tierra en kilómetros
     
